@@ -1,8 +1,5 @@
-let enableDNT;
-let enableGPC;
-
 browser.runtime.sendMessage({ action: 'get-dnt-state' }).then(function(response) {
-  enableDNT = response.state;
+  let enableDNT = response.state;
   if (enableDNT === 'disabled') {
     return;
   }
@@ -20,7 +17,7 @@ browser.runtime.sendMessage({ action: 'get-dnt-state' }).then(function(response)
 });
 
 browser.runtime.sendMessage({ action: 'get-gpc-state' }).then(function(response) {
-  enableGPC = response.state;
+  let enableGPC = response.state;
   if (enableGPC === 'disabled') {
     return;
   }
