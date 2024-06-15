@@ -28,7 +28,7 @@ browser.runtime.sendMessage({ action: 'get-gpc-state' }).then(function(response)
   var script = document.createElement('script');
   script.textContent = `
     Object.defineProperty(navigator, 'globalPrivacyControl', {
-      value: ${enableGPC ? true : undefined},
+      value: ${enableGPC ? true : false},
       writable: false,
       configurable: false
     });
