@@ -10,13 +10,15 @@ let randomGPCstate = getRandomBool();
 
 function modifyRequestHeader(header)
 {
-    let found;
-
-    if (randomizeDNT) {
-        if (randomDNTstate) {
-            found = false;
-            for (let h of header) {
-                if (h.name === 'DNT') {
+    if (randomizeDNT)
+    {
+        if (randomDNTstate)
+        {
+            let found = false;
+            for (let h of header)
+            {
+                if (h.name === 'DNT')
+                {
                     h.value = '1';
                     found = true;
                     break;
@@ -31,11 +33,15 @@ function modifyRequestHeader(header)
         }
     }
 
-    if (randomizeGPC) {
-        if (randomGPCstate) {
-            found = false;
-            for (let h of header) {
-                if (h.name === 'Sec-GPC') {
+    if (randomizeGPC)
+    {
+        if (randomGPCstate)
+        {
+            let found = false;
+            for (let h of header)
+            {
+                if (h.name === 'Sec-GPC')
+                {
                     h.value = '1';
                     found = true;
                     break;
@@ -49,6 +55,7 @@ function modifyRequestHeader(header)
             header = header.filter(header => header.name !== 'Sec-GPC');
         }
     }
+
     return header;
 }
 
@@ -87,22 +94,15 @@ browser.storage.local.get('GPC').then((data) => {
   });
 
 browser.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-    if (message.action === 'get-dnt-state') {
-        if (randomizeDNT) {
-            sendResponse({ state: randomDNTstate });
-        }
-        else {
-            sendResponse({ state: 'disabled' });
-        }
+    if (message.action === 'get-dnt-gpc-state') {
+        if (!randomizeDNT) { randomDNTstate = -1; }
+        if (!randomizeGPC) { randomGPCstate = -1; }
+
+        let response = { DNT: randomDNTstate, GPC: randomGPCstate };
+
+        sendResponse({ states: response });
+
         randomDNTstate = getRandomBool();
-    }
-    else if (message.action === 'get-gpc-state') {
-        if (randomizeGPC) {
-            sendResponse({ state: randomGPCstate });
-        }
-        else {
-            sendResponse({ state: 'disabled' });
-        }
         randomGPCstate = getRandomBool();
     }
 });
